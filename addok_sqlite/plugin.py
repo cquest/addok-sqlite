@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from addok.config import config
@@ -33,6 +34,9 @@ class SQLiteStore:
     def remove(self, *keys):
         with self.conn as conn:
             conn.executemany('DELETE FROM addok WHERE key=?', (keys, ))
+
+    def flush(self):
+        os.unlink(config.SQLITE_DB_PATH)
 
 
 def preconfigure(config):
