@@ -1,5 +1,5 @@
 from addok.batch import process_documents
-from addok.ds import DS
+from addok.ds import DS, get_document
 
 
 def index_document(doc):
@@ -24,6 +24,14 @@ def test_index_document():
     index_document(doc)
     with DS.conn as conn:
         assert conn.execute('SELECT * from addok').fetchone()[0] == 'd|xxxx'
+
+
+def test_reindex_document_should_replace():
+    index_document(doc)
+    doc2 = doc.copy()
+    doc2['name'] = 'Another name'
+    index_document(doc2)
+    assert get_document(b'd|xxxx')['name'] == 'Another name'
 
 
 def test_fetch_document():

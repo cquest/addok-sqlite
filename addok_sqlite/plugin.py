@@ -27,7 +27,7 @@ class SQLiteStore:
 
     def add(self, *docs):
         with self.conn as conn:
-            conn.executemany('INSERT OR IGNORE INTO addok '
+            conn.executemany('INSERT OR REPLACE INTO addok '
                              '(key, data) VALUES (?,?)', docs)
 
     def remove(self, *keys):
